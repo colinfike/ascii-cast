@@ -38,34 +38,23 @@ func getImage(fpath string) image.Image {
 	return img
 }
 
+// Could clean this up a bit
 func scaleImage(img image.Image, terminalWidth, terminalHeight float64) (image.Image, int, int) {
-	sz := img.Bounds()
-	maxX := float64(sz.Max.X)
-	maxY := float64(sz.Max.Y)
+	imageRect := img.Bounds()
+	maxImageX := float64(imageRect.Max.X)
+	maxImageY := float64(imageRect.Max.Y)
 
-	scaledHeight := maxY
-	scaledWidth := maxX
+	scaledHeight := maxImageY
+	scaledWidth := maxImageX
 
-	// fmt.Println("MaxX: ", maxX)
-	// fmt.Println("MaxY: ", maxY)
-	// fmt.Println("terminalWidth: ", terminalWidth)
-	// fmt.Println("terminalHeight: ", terminalHeight)
-
-	// You have image of dimensions X and Y
-	// You have terminal of dimension XT and YT
-
-	// if X > Y
-
-	if maxY >= maxX {
-		shrinkFactor := terminalHeight / maxY
-		// fmt.Println(shrinkFactor)
+	if maxImageY >= maxImageX {
+		shrinkFactor := terminalHeight / maxImageY
 		scaledHeight = terminalHeight
-		scaledWidth = maxX * shrinkFactor
+		scaledWidth = maxImageX * shrinkFactor
 	} else {
-		shrinkFactor := terminalWidth / maxX
-		// fmt.Println(shrinkFactor)
+		shrinkFactor := terminalWidth / maxImageX
 		scaledWidth = terminalWidth
-		scaledHeight = maxY * shrinkFactor
+		scaledHeight = maxImageY * shrinkFactor
 	}
 
 	scaledWidth = scaledWidth * 3
@@ -90,8 +79,6 @@ func convert2Ascii(img image.Image, w, h int) []byte {
 	}
 	return buf.Bytes()
 }
-
-// 0-255 Divide by 70
 
 func main() {
 	width, _ := terminal.Width()
